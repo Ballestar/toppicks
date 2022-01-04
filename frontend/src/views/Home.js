@@ -65,7 +65,7 @@ export default function Album() {
               NBA Top Picks
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Marketplace for NBA Player NFT's
+              the marketplace for NBA Player NFT's
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -81,18 +81,14 @@ export default function Album() {
       </main>
       {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
         <Typography
           variant="subtitle1"
           align="center"
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          built by @0xburgerboy
         </Typography>
-        <Copyright />
       </Box>
       {/* End footer */}
     </ThemeProvider>
