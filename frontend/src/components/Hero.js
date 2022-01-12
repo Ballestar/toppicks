@@ -1,10 +1,10 @@
+/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import lebronHero from '../images/FOS-2.23-NBA-TopShot.jpg'
-import React from 'react';
 
-const Home = () => {
+export default function Example() {
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -22,7 +22,7 @@ const Home = () => {
           <Popover>
             <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
                   <a
-                    href="/login"
+                    href="#"
                     className="items-center justify-center px-8 py-5 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
                   >
                     connect wallet
@@ -70,7 +70,5 @@ const Home = () => {
         />
       </div>
     </div>
-  );
+  )
 }
-
-export default Home;

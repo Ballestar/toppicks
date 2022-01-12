@@ -1,25 +1,6 @@
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import CardHeader from '@mui/material/CardHeader';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import metamasklogo from '../images/metamask-logo.png';
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-
-
-const theme = createTheme();
 
 const Login = () => {
     const [currentAccount, setCurrentAccount] = useState("");
@@ -73,63 +54,58 @@ const Login = () => {
 
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          {/* <CameraIcon sx={{ mr: 2 }} /> */}
-          <Typography variant="h6" color="inherit" noWrap>
-            NBA Top Picks
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h4" align="center" gutterBottom>
-          connect metamask wallet
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          NBA Top Picks is built on top of the rinkeby testnet.
-          do not connect mainnet wallet.
-        </Typography>
-        <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-                component="img"
-                image= {metamasklogo}
-                alt="green iguana"
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
-                rinkeby test network
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button onClick = {connectWallet} size="large" variant="contained">Connect Wallet</Button>
-            </CardActions>
-            <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
-                or download chrome extension
-                </Typography>
-            </CardContent>
-        </Card>
-      </Box>
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
+    <>
+      {/*
+        This example requires updating your template:
 
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          built by @0xburgerboy
-        </Typography>
-      </Box>
-      {/* End footer */}
-    </ThemeProvider>
+        ```
+        <html class="h-full bg-gray-50">
+        <body class="h-full">
+        ```
+      */}
+      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <img
+              className="mx-auto h-12 w-auto"
+              src={metamasklogo}
+              alt="Workflow"
+            />
+            <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900">connect your metamask wallet</h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or{' '}
+              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                download the metamask extension from the google chrome store
+              </a>
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" action="#" method="POST">
+            <input type="hidden" name="remember" defaultValue="true" />
+            <div className="rounded-md shadow-sm -space-y-px">
+              
+            </div>
+
+            <div className="flex items-center text-center justify-between">
+              <div className="text-md">
+                nba toppicks uses the ethereum rinkeby testnet {' '}
+                <a className="font-medium text-indigo-600 hover:text-indigo-500">
+                do not connect to ethereum mainnet!
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                connect wallet
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
 
