@@ -6,6 +6,7 @@ import { Router, useNavigate } from 'react-router-dom';
 const Login = () => {
     const [currentAccount, setCurrentAccount] = useState("");
     const [loading, setLoading] = useState(false);
+    const [connecting, setConnecting] = useState(false);
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -39,6 +40,7 @@ const Login = () => {
 
   const connectWallet = async (event) => {
     event.preventDefault();
+    setConnecting(true);
     try {
       const { ethereum } = window;
 
@@ -47,11 +49,20 @@ const Login = () => {
         return;
       }
 
+      // let chainId = await ethereum.request({ method: 'eth_chainId' });
+      // console.log("Connected to chain " + chainId);
+
+      // // String, hex code of the chainId of the Rinkebey test network
+      // const rinkebyChainId = "0x4"; 
+      // if (chainId !== rinkebyChainId) {
+      //   alert("You are not connected to the Rinkeby Test Network!");
+      // }
+
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-
+      setConnecting(false);
       navigate('/');
       // Setup listener! This is for the case where a user comes to our site
       // and connected their wallet for the first time.
@@ -105,10 +116,11 @@ const Login = () => {
 
             <div>
               <button
+                disabled = {connecting}
                 onClick={connectWallet}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                connect wallet
+                {connecting ? "connecting..." : "connect wallet"}
               </button>
             </div>
           </form>
