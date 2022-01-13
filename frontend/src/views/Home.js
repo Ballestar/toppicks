@@ -1,6 +1,4 @@
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Popover } from '@headlessui/react'
 import lebronHero from '../images/FOS-2.23-NBA-TopShot.jpg'
 import React from 'react';
 

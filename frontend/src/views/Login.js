@@ -1,58 +1,67 @@
 import metamasklogo from '../images/metamask-logo.png';
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
+import { Router, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [currentAccount, setCurrentAccount] = useState("");
     const [loading, setLoading] = useState(false);
+    let navigate = useNavigate();
 
-    useEffect(() =>{
-        checkIfWalletIsConnected();
+    useEffect(() => {
+      checkIfWalletIsConnected();
     })
 
     const checkIfWalletIsConnected = async () => {
-        const {ethereum} = window;
+      const { ethereum } = window;
 
-        const accounts = await ethereum.request({method: 'eth_accounts'});
+      if (!ethereum) {
+          console.log("Make sure you have metamask!");
+          return;
+      } else {
+          console.log("We have the ethereum object", ethereum);
+      }
 
-        if(accounts.length !== 0){
-            const account = accounts[0];
-            console.log("Found an authorized account:", account);
-            setCurrentAccount(account)
-        } else{
-            console.log("No authorized account found");
-        }
+      const accounts = await ethereum.request({ method: 'eth_accounts' });
+
+      if (accounts.length !== 0) {
+          const account = accounts[0];
+          console.log("Found an authorized account:", account);
+					setCurrentAccount(account)
+          
+          // Setup listener! This is for the case where a user comes to our site
+          // and ALREADY had their wallet connected + authorized.
+          // setupEventListener()
+      } else {
+          console.log("No authorized account found")
+      }
+  }
+
+  const connectWallet = async (event) => {
+    event.preventDefault();
+    try {
+      const { ethereum } = window;
+
+      if (!ethereum) {
+        alert("Get MetaMask!");
+        return;
+      }
+
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+
+      console.log("Connected", accounts[0]);
+      setCurrentAccount(accounts[0]);
+
+      navigate('/');
+      // Setup listener! This is for the case where a user comes to our site
+      // and connected their wallet for the first time.
+      // setupEventListener() 
+    } catch (error) {
+      console.log("error", error)
     }
+  }
 
-    const connectWallet = async() => {
-        try {
-            const {ethereum} = window;
-
-            if(!ethereum){
-                alert("get the metamask chrome extension!")
-                return;
-            }
-
-            let chainId = await ethereum.request({method: 'eth_chainId'});
-            console.log("connected to chain" + chainId);
-
-            const rinkebyChainId = "0x4";
-
-            if(chainId !== rinkebyChainId){
-                alert("you are not connected to the rinkeby testnet!")
-            }
-            
-            const accounts = await ethereum.request({method: "eth_requestAccounts"});
-
-            console.log("Connected", accounts[0]);
-            setCurrentAccount(accounts[0]);
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
+  
   return (
     <>
       {/*
@@ -96,7 +105,7 @@ const Login = () => {
 
             <div>
               <button
-                type="submit"
+                onClick={connectWallet}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 connect wallet
