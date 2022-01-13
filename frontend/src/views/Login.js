@@ -5,7 +5,6 @@ import { Router, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [currentAccount, setCurrentAccount] = useState("");
-    const [loading, setLoading] = useState(false);
     const [connecting, setConnecting] = useState(false);
     let navigate = useNavigate();
 
@@ -29,7 +28,7 @@ const Login = () => {
           const account = accounts[0];
           console.log("Found an authorized account:", account);
 					setCurrentAccount(account)
-          
+
           // Setup listener! This is for the case where a user comes to our site
           // and ALREADY had their wallet connected + authorized.
           // setupEventListener()

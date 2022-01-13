@@ -1,8 +1,41 @@
 import { Popover } from '@headlessui/react'
 import lebronHero from '../images/FOS-2.23-NBA-TopShot.jpg'
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
+  const [currentAccount, setCurrentAccount] = useState("");
+
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  })
+
+  const checkIfWalletIsConnected = async () => {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+        console.log("Make sure you have metamask!");
+        return;
+    } else {
+        console.log("We have the ethereum object", ethereum);
+    }
+
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
+
+    if (accounts.length !== 0) {
+        const account = accounts[0];
+        console.log("Found an authorized account:", account);
+        setCurrentAccount(account)
+        console.log(account);
+        // Setup listener! This is for the case where a user comes to our site
+        // and ALREADY had their wallet connected + authorized.
+        // setupEventListener()
+    } else {
+        console.log("No authorized account found")
+    }
+}
+
+
+
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -17,6 +50,17 @@ const Home = () => {
             <polygon points="50,0 100,0 50,100 0,100" />
           </svg>
 
+          {currentAccount ?           
+          <Popover>
+            <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
+                  <a
+                    href="/"
+                    className="items-center justify-center px-8 py-5 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+                  >
+                    {currentAccount.substring(0,5) + "..." + currentAccount.substring(currentAccount.length-4)}
+                  </a>
+            </div>
+          </Popover>: 
           <Popover>
             <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
                   <a
@@ -26,7 +70,8 @@ const Home = () => {
                     connect wallet
                   </a>
             </div>
-          </Popover>
+          </Popover> }
+
 
           <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
             <div className="sm:text-center lg:text-left">
