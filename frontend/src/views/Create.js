@@ -17,6 +17,12 @@ const Create = () => {
   const contractAddress ="0x81097b2Aacf41300A503C7Dbf9f2eB548979ce08"
   const contractABI = abi.abi
 
+  let data = {
+    name: name,
+    description: description,
+    image: jpeg
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected();
   })
@@ -64,6 +70,7 @@ const Create = () => {
   }
 
   const mintNFT = async(e) =>{
+    let json = JSON.stringify(data);
     e.preventDefault();
     setMining(true);
     try{
@@ -71,8 +78,8 @@ const Create = () => {
       const signer = provider.getSigner();
       const topPickContract = new ethers.Contract(contractAddress, contractABI, signer);
   
-      const createTxn = await topPickContract.create()
-      console.log('Create transaction started...', createTxn.hash)
+      const createTxn = await topPickContract.mintTopPickAndList(json,price);
+      console.log('Create transaction started...', createTxn.hash);
   
       await createTxn.wait();
       console.log('Created keyboard!', createTxn.hash);
