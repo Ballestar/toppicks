@@ -1,15 +1,55 @@
 import React, { useEffect, useState } from "react";
-
+import { ethers } from "ethers";
+import {useNavigate } from 'react-router-dom';
+import abi from '../utils/toppicks.json';
 
 const Create = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [jpeg, setJpeg] = useState(null);
+  const [price, setPrice] = useState(0);
+  const [mining, setMining] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState("");
+  
+  const { ethereum } = window;
+  const navigate = useNavigate();
+
+  const contractAddress ="0x81097b2Aacf41300A503C7Dbf9f2eB548979ce08"
+  const contractABI = abi.abi
+
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  })
+
+  const checkIfWalletIsConnected = async () => {
+
+    if (!ethereum) {
+        console.log("Make sure you have metamask!");
+        return;
+    } else {
+        console.log("We have the ethereum object", ethereum);
+    }
+
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
+
+    if (accounts.length !== 0) {
+        const account = accounts[0];
+        console.log("Found an authorized account:", account);
+        setCurrentAccount(account)
+        console.log(account);
+        // Setup listener! This is for the case where a user comes to our site
+        // and ALREADY had their wallet connected + authorized.
+        // setupEventListener()
+    } else {
+        console.log("No authorized account found")
+    }
+}
 
   const nameSelectedHandler = (e) => {
     setName(e.target.value);
     console.log(name);
   }
+
   const descriptionSelectedHandler = (e) => {
     setDescription(e.target.value);
     console.log(description);
@@ -18,10 +58,29 @@ const Create = () => {
     setJpeg(e.target.files[0]);
     console.log(jpeg);
   }
+  const priceSelectedHandler = (e) => {
+    setPrice(e.target.value);
+    console.log(price);
+  }
 
-  const mintNFT = async(event) =>{
-    event.preventDefault();
-    
+  const mintNFT = async(e) =>{
+    e.preventDefault();
+    setMining(true);
+    try{
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const topPickContract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+      const createTxn = await topPickContract.create()
+      console.log('Create transaction started...', createTxn.hash)
+  
+      await createTxn.wait();
+      console.log('Created keyboard!', createTxn.hash);
+      navigate('/');
+
+    } finally{
+      setMining(false);
+    }
 
   }
 
@@ -47,7 +106,7 @@ const Create = () => {
                           name="company-website"
                           id="company-website"
                           className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                          placeholder="name"
+                          placeholder="who's the player"
                         />
                       </div>
                     </div>
@@ -64,9 +123,27 @@ const Create = () => {
                         name="about"
                         rows={3}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                        placeholder="describe the top pick"
+                        placeholder="describe your top pick"
                         defaultValue={''}
                       />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="col-span-3 sm:col-span-2">
+                      <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
+                        price
+                      </label>
+                      <div className="mt-1 flex rounded-md shadow-sm">
+                        <input
+                          onChange={priceSelectedHandler}
+                          type="text"
+                          name="company-website"
+                          id="company-website"
+                          className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          placeholder="how much eth do u want"
+                        />
+                      </div>
                     </div>
                   </div>
 

@@ -37,8 +37,8 @@ const Login = () => {
       }
   }
 
-  const connectWallet = async (event) => {
-    event.preventDefault();
+  const connectWallet = async (e) => {
+    e.preventDefault();
     setConnecting(true);
     try {
       const { ethereum } = window;
