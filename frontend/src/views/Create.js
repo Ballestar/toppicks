@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import {useNavigate } from 'react-router-dom';
 import abi from '../utils/toppicks.json';
+import { Dropzone, FileItem } from "@dropzone-ui/react";
 
 const Create = () => {
   const [name, setName] = useState("");
@@ -30,19 +31,19 @@ const Create = () => {
   const checkIfWalletIsConnected = async () => {
 
     if (!ethereum) {
-        console.log("Make sure you have metamask!");
+        // console.log("Make sure you have metamask!");
         return;
     } else {
-        console.log("We have the ethereum object", ethereum);
+        // console.log("We have the ethereum object", ethereum);
     }
 
     const accounts = await ethereum.request({ method: 'eth_accounts' });
 
     if (accounts.length !== 0) {
         const account = accounts[0];
-        console.log("Found an authorized account:", account);
+        // console.log("Found an authorized account:", account);
         setCurrentAccount(account)
-        console.log(account);
+        // console.log(account);
         // Setup listener! This is for the case where a user comes to our site
         // and ALREADY had their wallet connected + authorized.
         // setupEventListener()
@@ -53,41 +54,41 @@ const Create = () => {
 
   const nameSelectedHandler = (e) => {
     setName(e.target.value);
-    console.log(name);
   }
 
   const descriptionSelectedHandler = (e) => {
     setDescription(e.target.value);
-    console.log(description);
   }
   const jpegSelectedHandler = (e) => {
-    setJpeg(e.target.files[0]);
+    setJpeg(e);
     console.log(jpeg);
   }
   const priceSelectedHandler = (e) => {
     setPrice(e.target.value);
-    console.log(price);
   }
 
   const mintNFT = async(e) =>{
     let json = JSON.stringify(data);
     e.preventDefault();
     setMining(true);
-    try{
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const topPickContract = new ethers.Contract(contractAddress, contractABI, signer);
-  
-      const createTxn = await topPickContract.mintTopPickAndList(json,price);
-      console.log('Create transaction started...', createTxn.hash);
-  
-      await createTxn.wait();
-      console.log('Created keyboard!', createTxn.hash);
-      navigate('/');
+    console.log(json);
+    navigate('/');
 
-    } finally{
-      setMining(false);
-    }
+    // try{
+    //   const provider = new ethers.providers.Web3Provider(ethereum);
+    //   const signer = provider.getSigner();
+    //   const topPickContract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+    //   const createTxn = await topPickContract.mintTopPickAndList(json,price);
+    //   console.log('Create transaction started...', createTxn.hash);
+  
+    //   await createTxn.wait();
+    //   console.log('Created keyboard!', createTxn.hash);
+    //   navigate('/');
+
+    // } finally{
+    //   setMining(false);
+    // }
 
   }
 
@@ -156,7 +157,34 @@ const Create = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">jpeg</label>
-                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div className="relative min-h-48">
+                              {
+                                jpeg ?
+                                <div className="mt-1 flex flex-col items-center pt-6 h-auto">
+                                  <div className="relative h-40 w-full">
+                                    <img src={jpeg} alt={jpeg}></img>
+                                  </div>
+                                </div>
+                                    :
+                                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                      <div className="space-y-1 text-center">
+                                        <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <div className="relative flex text-sm text-gray-600 justify-center">
+                                          <label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-indigo-400 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <input accept="image/*" id="file-upload" name="file-upload" type="file" className="sr-only" onChange={jpegSelectedHandler}/>
+                                            <span>Upload a file</span>
+                                            </label>
+                                        </div>
+                                        <p className="text-xs text-gray-500">
+                                          PNG, JPG, GIF up to 10MB
+                                        </p>
+                                      </div>
+                                    </div>
+                              }
+                            </div>
+                    {/* <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
                         <svg
                           className="mx-auto h-12 w-12 text-gray-400"
@@ -173,6 +201,7 @@ const Create = () => {
                           />
                         </svg>
                         <div className="flex text-sm text-gray-600">
+
                           <label
                             htmlFor="file-upload"
                             className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
@@ -184,7 +213,8 @@ const Create = () => {
                         </div>
                         <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                       </div>
-                    </div>
+                    </div> */}
+                    
                   </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
